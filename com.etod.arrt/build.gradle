@@ -12,6 +12,9 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'org.telegram:telegrambots:6.1.0'
+    implementation group: 'org.telegram', name: 'telegrambotsextensions', version: '6.1.0'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.27'
 }
 
 test {
