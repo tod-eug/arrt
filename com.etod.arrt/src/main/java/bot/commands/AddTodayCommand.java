@@ -1,8 +1,11 @@
 package bot.commands;
 
 import bot.ArbeitenBot;
+import bot.ReplyConstants;
+import bot.keyboards.Keyboards;
 import dto.JobLog;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.IBotCommand;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
@@ -24,5 +27,12 @@ public class AddTodayCommand implements IBotCommand {
         JobLog jl = new JobLog();
         jl.setJobDate(new Date());
         ArbeitenBot.stateMap.put(message.getFrom().getId(), jl);
+
+        MessageProcessor mp = new MessageProcessor();
+        SendMessage sm = new SendMessage();
+        sm.setChatId(message.getChatId());
+        sm.setText(ReplyConstants.CHOOSE_INITIAL_HOUR);
+        sm.setReplyMarkup(Keyboards.getKeyboard(SysConstants.INITIAL_HOURS_CALLBACK_TYPE, SysConstants.INITIAL_HOURS));
+        mp.sendMsg(absSender, sm);
     }
 }

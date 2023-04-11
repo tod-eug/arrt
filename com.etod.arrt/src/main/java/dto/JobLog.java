@@ -6,22 +6,28 @@ public class JobLog {
 
     private boolean completed;
     private Date jobDate;
-    private Date startInterval;
-    private Date endInterval;
+    private String startIntervalHours;
+    private String startIntervalMinutes;
+    private String endIntervalHours;
+    private String endIntervalMinutes;
+    private double hoursAmount;
 
     public JobLog() {
         this.jobDate = null;
-        this.startInterval = null;
-        this.endInterval = null;
+        this.startIntervalHours = "";
+        this.startIntervalMinutes = "";
+        this.endIntervalHours = "";
+        this.endIntervalMinutes = "";
+        hoursAmount = 0;
         this.completed = false;
     }
 
-    public void setStartInterval(Date startInterval) {
-        this.startInterval = startInterval;
+    public void setStartIntervalHours(String startIntervalHours) {
+        this.startIntervalHours = startIntervalHours;
     }
 
-    public void setEndInterval(Date endInterval) {
-        this.endInterval = endInterval;
+    public void setEndIntervalHours(String endIntervalHours) {
+        this.endIntervalHours = endIntervalHours;
     }
 
     public void setJobDate(Date jobDate) {
@@ -32,12 +38,12 @@ public class JobLog {
         return jobDate;
     }
 
-    public Date getStartInterval() {
-        return startInterval;
+    public String getStartIntervalHours() {
+        return startIntervalHours;
     }
 
-    public Date getEndInterval() {
-        return endInterval;
+    public String getEndIntervalHours() {
+        return endIntervalHours;
     }
 
     public boolean isCompleted() {
@@ -46,5 +52,29 @@ public class JobLog {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public String getStartIntervalMinutes() {
+        return startIntervalMinutes;
+    }
+
+    public void setStartIntervalMinutes(String startIntervalMinutes) {
+        this.startIntervalMinutes = startIntervalMinutes;
+    }
+
+    public String getEndIntervalMinutes() {
+        return endIntervalMinutes;
+    }
+
+    public void setEndIntervalMinutes(String endIntervalMinutes) {
+        this.endIntervalMinutes = endIntervalMinutes;
+    }
+
+    public double getHoursAmount() {
+        return hoursAmount;
+    }
+
+    public void setHoursAmount(double hoursAmount) {
+        this.hoursAmount = hoursAmount;
     }
 }
