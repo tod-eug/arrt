@@ -1,6 +1,9 @@
 package bot.commands;
 
+import bot.ReplyConstants;
+import db.UsersHelper;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.IBotCommand;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
@@ -17,6 +20,13 @@ public class StartCommand implements IBotCommand {
 
     @Override
     public void processMessage(AbsSender absSender, Message message, String[] arguments) {
+        MessageProcessor mp = new MessageProcessor();
+        SendMessage sm = new SendMessage();
+        sm.setChatId(message.getChatId());
+        sm.setText(ReplyConstants.START_REPLY_WELCOME);
+        mp.sendMsg(absSender, sm);
 
+        UsersHelper uh = new UsersHelper();
+        String userId = uh.findUserByTgId(message.getFrom().getId().toString(), message.getFrom(), message.getChatId().toString());
     }
 }

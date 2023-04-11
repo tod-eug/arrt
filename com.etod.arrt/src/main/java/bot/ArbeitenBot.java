@@ -1,14 +1,19 @@
 package bot;
 
 import bot.commands.StartCommand;
+import dto.JobLog;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import util.PropertiesProvider;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ArbeitenBot extends TelegramLongPollingCommandBot {
+
+    public static Map<Long, JobLog> stateMap = new HashMap<>();
 
     public ArbeitenBot() {
         super();
