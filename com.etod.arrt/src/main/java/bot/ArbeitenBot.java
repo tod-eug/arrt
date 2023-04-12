@@ -4,6 +4,8 @@ import bot.commands.AddTodayCommand;
 import bot.commands.StartCommand;
 import bot.commands.SysConstants;
 import bot.keyboards.Keyboards;
+import db.JobLogHelper;
+import db.UsersHelper;
 import dto.JobLog;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -82,24 +84,33 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
                     jl.setStartIntervalHours(value);
                     editMessage(chatId, messageId, ReplyConstants.CHOOSE_INITIAL_MINUTES, false,
                             Keyboards.getKeyboard(SysConstants.INITIAL_MINUTES_CALLBACK_TYPE, SysConstants.INITIAL_MINUTES));
+                    stateMap.put(userId, jl);
                     break;
                 case SysConstants.INITIAL_MINUTES_CALLBACK_TYPE:
                     jl.setStartIntervalMinutes(value);
                     editMessage(chatId, messageId, ReplyConstants.CHOOSE_END_HOUR, false,
                             Keyboards.getKeyboard(SysConstants.END_HOURS_CALLBACK_TYPE, SysConstants.END_HOURS));
+                    stateMap.put(userId, jl);
                     break;
                 case SysConstants.END_HOURS_CALLBACK_TYPE:
                     jl.setEndIntervalHours(value);
                     editMessage(chatId, messageId, ReplyConstants.CHOOSE_END_MINUTES, false,
                             Keyboards.getKeyboard(SysConstants.END_MINUTES_CALLBACK_TYPE, SysConstants.END_MINUTES));
+                    stateMap.put(userId, jl);
                     break;
                 case SysConstants.END_MINUTES_CALLBACK_TYPE:
                     jl.setEndIntervalMinutes(value);
                     jl.setCompleted(true);
-                    editMessage(chatId, messageId, ReplyConstants.JOB_LOGGED, true, null);
+                    JobLogHelper jlh = new JobLogHelper();
+                    UsersHelper uh = new UsersHelper();
+                    String userUuid = uh.findUserByTgId(userId.toString(), update.getCallbackQuery().getFrom(), chatId.toString());
+                    if (jlh.saveJob(userUuid, jl))
+                        editMessage(chatId, messageId, ReplyConstants.JOB_LOGGED, true, null);
+                    else
+                        deleteMessage(chatId, messageId);
+                    stateMap.remove(userId);
                     break;
             }
-            stateMap.put(userId, jl);
 
 
 

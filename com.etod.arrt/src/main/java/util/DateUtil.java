@@ -19,22 +19,18 @@ public class DateUtil {
         ZonedDateTime end = ZonedDateTime.ofInstant(endDate.toInstant(), ZoneId.systemDefault());
         DecimalFormat f = new DecimalFormat("##.00");
 
-        Duration total = Duration.ofMinutes(ChronoUnit.MINUTES.between(end, start));
+        Duration total = Duration.ofMinutes(ChronoUnit.MINUTES.between(start, end));
         double hours = total.getSeconds() / 3600d;
         return f.format(hours);
     }
 
-    public static Date parseDate(String startHours, String startMinutes) {
-        Date date = new Date();
+    public static Date updateJobTime(Date jobDate, String startHours, String startMinutes) {
         Integer hours = parseInt(startHours);
         Integer minutes = parseInt(startMinutes);
-        date = DateUtils.truncate(date, Calendar.DAY_OF_MONTH);
-        date = DateUtils.setYears(date, 1900);
-        date = DateUtils.setMonths(date, 1);
-        date = DateUtils.setDays(date, 1);
-        date = DateUtils.setHours(date, hours);
-        date = DateUtils.setMinutes(date, minutes);
-        date = DateUtils.setSeconds(date, 0);
-        return date;
+        jobDate = DateUtils.truncate(jobDate, Calendar.DAY_OF_MONTH);
+        jobDate = DateUtils.setHours(jobDate, hours);
+        jobDate = DateUtils.setMinutes(jobDate, minutes);
+        jobDate = DateUtils.setSeconds(jobDate, 0);
+        return jobDate;
     }
 }
