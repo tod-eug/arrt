@@ -6,7 +6,7 @@ import bot.commands.SysConstants;
 import bot.keyboards.Keyboards;
 import db.JobLogHelper;
 import db.UsersHelper;
-import dto.JobLog;
+import dto.JobLogRaw;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class ArbeitenBot extends TelegramLongPollingCommandBot {
 
-    public static Map<Long, JobLog> stateMap = new HashMap<>();
+    public static Map<Long, JobLogRaw> stateMap = new HashMap<>();
 
     public ArbeitenBot() {
         super();
@@ -77,7 +77,7 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
         String value = parsedCallback[1];
 
         //edit JobLog
-        JobLog jl = stateMap.get(userId);
+        JobLogRaw jl = stateMap.get(userId);
         if (jl != null) {
             switch (parsedCallback[0]) {
                 case SysConstants.INITIAL_HOURS_CALLBACK_TYPE:

@@ -1,18 +1,19 @@
 package db;
 
+import db.mappers.JobLogMapper;
 import dto.JobLog;
+import dto.JobLogRaw;
 import org.apache.commons.lang3.time.DateUtils;
 import util.DateUtil;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 public class JobLogHelper {
 
-    public boolean saveJob(String userId, JobLog jl) {
+    public boolean saveJob(String userId, JobLogRaw jl) {
 
         SimpleDateFormat createDateDefaultPattern = new SimpleDateFormat(DatabaseHelper.createDateDefaultPattern);
         SimpleDateFormat jobDatePattern = new SimpleDateFormat(DatabaseHelper.jobDatePattern);
@@ -25,7 +26,7 @@ public class JobLogHelper {
         String startInterval = createDateDefaultPattern.format(startDate);
         String endInterval = timeIntervalPattern.format(endDate);
 
-        String hours = DateUtil.calculateHours(startDate, endDate);
+        String hours = DateUtil.calculateHours(startDate, endDate).replace(",", ".");
         UUID id = UUID.randomUUID();
         String createdDate = timeIntervalPattern.format(new Date());
 
@@ -42,5 +43,30 @@ public class JobLogHelper {
             dbHelper.closeConnections();
         }
         return true;
+    }
+
+    public List<JobLog> getJobs(String userId, Date from, Date to) {
+
+        List<JobLog> result = new ArrayList<>();
+        JobLogMapper jlm = new JobLogMapper();
+        SimpleDateFormat timeIntervalPattern = new SimpleDateFormat(DatabaseHelper.timeIntervalPattern);
+
+        String startInterval = timeIntervalPattern.format(from);
+        String endInterval = timeIntervalPattern.format(to);
+
+        String selectQuery = String.format("select * from public.job_history where user_id = '%s' and start_time > '%s' and end_time < '%s';", userId, startInterval, endInterval);
+
+        DatabaseHelper dbHelper = new DatabaseHelper();
+        try {
+            ResultSet st = dbHelper.getPreparedStatement(selectQuery).executeQuery();
+            while(st.next()) {
+                result.add(jlm.mapJobLog(st.getString("date"), st.getString("start_time"), st.getString("end_time"), st.getString("hours")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            dbHelper.closeConnections();
+        }
+        return result;
     }
 }

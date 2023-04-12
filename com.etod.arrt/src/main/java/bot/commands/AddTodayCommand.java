@@ -3,7 +3,7 @@ package bot.commands;
 import bot.ArbeitenBot;
 import bot.ReplyConstants;
 import bot.keyboards.Keyboards;
-import dto.JobLog;
+import dto.JobLogRaw;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.IBotCommand;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -24,7 +24,7 @@ public class AddTodayCommand implements IBotCommand {
 
     @Override
     public void processMessage(AbsSender absSender, Message message, String[] arguments) {
-        JobLog jl = new JobLog();
+        JobLogRaw jl = new JobLogRaw();
         jl.setJobDate(new Date());
         ArbeitenBot.stateMap.put(message.getFrom().getId(), jl);
 
