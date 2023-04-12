@@ -13,7 +13,7 @@ import java.util.*;
 
 public class JobLogHelper {
 
-    public boolean saveJob(String userId, JobLogRaw jl) {
+    public UUID saveJob(String userId, JobLogRaw jl) {
 
         SimpleDateFormat createDateDefaultPattern = new SimpleDateFormat(DatabaseHelper.createDateDefaultPattern);
         SimpleDateFormat jobDatePattern = new SimpleDateFormat(DatabaseHelper.jobDatePattern);
@@ -38,11 +38,11 @@ public class JobLogHelper {
             dbHelper.getPreparedStatement(insertQuery).execute();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return null;
         } finally {
             dbHelper.closeConnections();
         }
-        return true;
+        return id;
     }
 
     public List<JobLog> getJobs(String userId, Date from, Date to) {
@@ -61,6 +61,27 @@ public class JobLogHelper {
             ResultSet st = dbHelper.getPreparedStatement(selectQuery).executeQuery();
             while(st.next()) {
                 result.add(jlm.mapJobLog(st.getString("date"), st.getString("start_time"), st.getString("end_time"), st.getString("hours")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            dbHelper.closeConnections();
+        }
+        return result;
+    }
+
+    public JobLog getJob(String jobItemId) {
+
+        JobLog result = null;
+        JobLogMapper jlm = new JobLogMapper();
+
+        String selectQuery = String.format("select * from public.job_history where id = '%s';", jobItemId);
+
+        DatabaseHelper dbHelper = new DatabaseHelper();
+        try {
+            ResultSet st = dbHelper.getPreparedStatement(selectQuery).executeQuery();
+            while(st.next()) {
+                result = jlm.mapJobLog(st.getString("date"), st.getString("start_time"), st.getString("end_time"), st.getString("hours"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

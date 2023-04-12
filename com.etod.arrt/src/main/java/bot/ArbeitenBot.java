@@ -6,6 +6,7 @@ import bot.commands.SysConstants;
 import bot.keyboards.Keyboards;
 import db.JobLogHelper;
 import db.UsersHelper;
+import dto.JobLog;
 import dto.JobLogRaw;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -20,6 +21,7 @@ import util.PropertiesProvider;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class ArbeitenBot extends TelegramLongPollingCommandBot {
 
@@ -104,9 +106,12 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
                     JobLogHelper jlh = new JobLogHelper();
                     UsersHelper uh = new UsersHelper();
                     String userUuid = uh.findUserByTgId(userId.toString(), update.getCallbackQuery().getFrom(), chatId.toString());
-                    if (jlh.saveJob(userUuid, jl))
-                        editMessage(chatId, messageId, ReplyConstants.JOB_LOGGED, true, null);
-                    else
+                    UUID uuid = jlh.saveJob(userUuid, jl);
+                    JobLog finalJobLog;
+                    if (uuid != null) {
+                        finalJobLog = jlh.getJob(uuid.toString());
+                        editMessage(chatId, messageId, MessageProvider.getJobLoggedMessage(finalJobLog), true, null);
+                    } else
                         deleteMessage(chatId, messageId);
                     stateMap.remove(userId);
                     break;
