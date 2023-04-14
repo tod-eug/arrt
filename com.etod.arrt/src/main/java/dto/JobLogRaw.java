@@ -6,6 +6,8 @@ public class JobLogRaw {
 
     private boolean completed;
     private Date jobDate;
+    private String dayOfDate;
+    private String monthOfDate;
     private String startIntervalHours;
     private String startIntervalMinutes;
     private String endIntervalHours;
@@ -14,6 +16,8 @@ public class JobLogRaw {
 
     public JobLogRaw() {
         this.jobDate = null;
+        this.dayOfDate = "";
+        this.monthOfDate = "";
         this.startIntervalHours = "";
         this.startIntervalMinutes = "";
         this.endIntervalHours = "";
@@ -76,5 +80,21 @@ public class JobLogRaw {
 
     public void setHoursAmount(double hoursAmount) {
         this.hoursAmount = hoursAmount;
+    }
+
+    public String getDayOfDate() {
+        return dayOfDate;
+    }
+
+    public void setDayOfDate(String dayOfDate) {
+        this.dayOfDate = dayOfDate;
+    }
+
+    public String getMonthOfDate() {
+        return monthOfDate;
+    }
+
+    public void setMonthOfDate(String monthOfDate) {
+        this.monthOfDate = monthOfDate;
     }
 }

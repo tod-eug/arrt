@@ -10,17 +10,15 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
-import java.util.Date;
-
-public class AddTodayCommand implements IBotCommand {
+public class AddCommand implements IBotCommand {
     @Override
     public String getCommandIdentifier() {
-        return "today";
+        return "add";
     }
 
     @Override
     public String getDescription() {
-        return "today";
+        return "add";
     }
 
     @Override
@@ -32,11 +30,10 @@ public class AddTodayCommand implements IBotCommand {
 
         if (PermissionsChecker.isAllowed(message.getFrom().getId())) {
             JobLogRaw jl = new JobLogRaw();
-            jl.setJobDate(new Date());
             ArbeitenBot.stateMap.put(message.getFrom().getId(), jl);
 
-            sm.setText(ReplyConstants.CHOOSE_INITIAL_HOUR);
-            sm.setReplyMarkup(Keyboards.getKeyboard(SysConstants.INITIAL_HOURS_CALLBACK_TYPE, SysConstants.INITIAL_HOURS));
+            sm.setText(ReplyConstants.CHOOSE_DAY);
+            sm.setReplyMarkup(Keyboards.getKeyboard(SysConstants.DAYS_CALLBACK_TYPE, SysConstants.DAYS));
         } else {
             sm.setText(ReplyConstants.NOT_ALLOWED);
         }

@@ -7,5 +7,7 @@ public interface ReplyConstants {
     String CHOOSE_INITIAL_MINUTES = "Выберите минуты начала работы";
     String CHOOSE_END_HOUR = "Выберите час окончания работы";
     String CHOOSE_END_MINUTES = "Выберите минуты окончания работы";
-    String JOB_LOGGED = "Часы записаны!";
+    String CHOOSE_DAY = "Выберите день внесения отработанного времени";
+    String CHOOSE_MONTH = "Выберите месяц внесения отработанного времени";
+    String DATE_ERROR = "Вы ошиблись в выборе даты";
 }

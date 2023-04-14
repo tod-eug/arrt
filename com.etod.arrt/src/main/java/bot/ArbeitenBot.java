@@ -1,6 +1,7 @@
 package bot;
 
-import bot.commands.AddTodayCommand;
+import bot.commands.AddCommand;
+import bot.commands.TodayCommand;
 import bot.commands.StartCommand;
 import bot.commands.SysConstants;
 import bot.keyboards.Keyboards;
@@ -16,6 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import util.DateUtil;
 import util.PropertiesProvider;
 
 import java.util.HashMap;
@@ -30,7 +32,8 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
     public ArbeitenBot() {
         super();
         register(new StartCommand());
-        register(new AddTodayCommand());
+        register(new TodayCommand());
+        register(new AddCommand());
     }
 
     @Override
@@ -85,6 +88,22 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
         JobLogRaw jl = stateMap.get(userId);
         if (jl != null) {
             switch (parsedCallback[0]) {
+                case SysConstants.DAYS_CALLBACK_TYPE:
+                    jl.setDayOfDate(value);
+                    editMessage(chatId, messageId, ReplyConstants.CHOOSE_MONTH, false,
+                            Keyboards.getKeyboard(SysConstants.MONTHS_CALLBACK_TYPE, SysConstants.MONTHS));
+                    stateMap.put(userId, jl);
+                    break;
+                case SysConstants.MONTHS_CALLBACK_TYPE:
+                    jl.setMonthOfDate(value);
+                    if (DateUtil.isDateCorrect(jl.getDayOfDate(), jl.getMonthOfDate())) {
+                        jl.setJobDate(DateUtil.parseDate(jl.getDayOfDate(), jl.getMonthOfDate()));
+                        editMessage(chatId, messageId, ReplyConstants.CHOOSE_INITIAL_HOUR, false,
+                                Keyboards.getKeyboard(SysConstants.INITIAL_HOURS_CALLBACK_TYPE, SysConstants.INITIAL_HOURS));
+                        stateMap.put(userId, jl);
+                    } else
+                        editMessage(chatId, messageId, MessageProvider.getDateIsErrorMessage(jl), false, null);
+                    break;
                 case SysConstants.INITIAL_HOURS_CALLBACK_TYPE:
                     jl.setStartIntervalHours(value);
                     editMessage(chatId, messageId, ReplyConstants.CHOOSE_INITIAL_MINUTES, false,
