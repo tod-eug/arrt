@@ -1,7 +1,8 @@
 package bot;
 
 public interface ReplyConstants {
-    String START_REPLY_WELCOME = "Welcome!";
+    String START_REPLY_WELCOME = "Welcome! ";
+    String NOT_ALLOWED = "This bot can do nothing for you. Apologies.";
     String CHOOSE_INITIAL_HOUR = "Выберите час начала работы";
     String CHOOSE_INITIAL_MINUTES = "Выберите минуты начала работы";
     String CHOOSE_END_HOUR = "Выберите час окончания работы";

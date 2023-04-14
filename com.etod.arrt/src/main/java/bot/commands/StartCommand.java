@@ -1,5 +1,6 @@
 package bot.commands;
 
+import bot.PermissionsChecker;
 import bot.ReplyConstants;
 import db.UsersHelper;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.IBotCommand;
@@ -20,13 +21,18 @@ public class StartCommand implements IBotCommand {
 
     @Override
     public void processMessage(AbsSender absSender, Message message, String[] arguments) {
+        UsersHelper uh = new UsersHelper();
+        String userId = uh.findUserByTgId(message.getFrom().getId().toString(), message.getFrom(), message.getChatId().toString());
+
         MessageProcessor mp = new MessageProcessor();
         SendMessage sm = new SendMessage();
         sm.setChatId(message.getChatId());
-        sm.setText(ReplyConstants.START_REPLY_WELCOME);
-        mp.sendMsg(absSender, sm);
 
-        UsersHelper uh = new UsersHelper();
-        String userId = uh.findUserByTgId(message.getFrom().getId().toString(), message.getFrom(), message.getChatId().toString());
+        if (PermissionsChecker.isAllowed(message.getFrom().getId()))
+            sm.setText(ReplyConstants.START_REPLY_WELCOME);
+        else
+            sm.setText(ReplyConstants.START_REPLY_WELCOME + ReplyConstants.NOT_ALLOWED);
+
+        mp.sendMsg(absSender, sm);
     }
 }

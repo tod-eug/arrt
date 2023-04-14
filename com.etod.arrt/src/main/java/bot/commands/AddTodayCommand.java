@@ -1,6 +1,7 @@
 package bot.commands;
 
 import bot.ArbeitenBot;
+import bot.PermissionsChecker;
 import bot.ReplyConstants;
 import bot.keyboards.Keyboards;
 import dto.JobLogRaw;
@@ -24,15 +25,22 @@ public class AddTodayCommand implements IBotCommand {
 
     @Override
     public void processMessage(AbsSender absSender, Message message, String[] arguments) {
-        JobLogRaw jl = new JobLogRaw();
-        jl.setJobDate(new Date());
-        ArbeitenBot.stateMap.put(message.getFrom().getId(), jl);
 
         MessageProcessor mp = new MessageProcessor();
         SendMessage sm = new SendMessage();
         sm.setChatId(message.getChatId());
-        sm.setText(ReplyConstants.CHOOSE_INITIAL_HOUR);
-        sm.setReplyMarkup(Keyboards.getKeyboard(SysConstants.INITIAL_HOURS_CALLBACK_TYPE, SysConstants.INITIAL_HOURS));
+
+        if (PermissionsChecker.isAllowed(message.getFrom().getId())) {
+            JobLogRaw jl = new JobLogRaw();
+            jl.setJobDate(new Date());
+            ArbeitenBot.stateMap.put(message.getFrom().getId(), jl);
+
+            sm.setText(ReplyConstants.CHOOSE_INITIAL_HOUR);
+            sm.setReplyMarkup(Keyboards.getKeyboard(SysConstants.INITIAL_HOURS_CALLBACK_TYPE, SysConstants.INITIAL_HOURS));
+        } else {
+            sm.setText(ReplyConstants.NOT_ALLOWED);
+        }
+
         mp.sendMsg(absSender, sm);
     }
 }

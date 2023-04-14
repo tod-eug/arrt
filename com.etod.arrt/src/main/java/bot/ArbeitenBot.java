@@ -53,6 +53,9 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
         if (update.hasCallbackQuery()) {
             processCallbackQuery(update);
         }
+        if (update.hasMessage()) {
+            deleteMessage(update.getMessage().getChatId(), update.getMessage().getMessageId());
+        }
     }
 
     @Override
