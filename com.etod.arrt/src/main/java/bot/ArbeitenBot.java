@@ -1,9 +1,6 @@
 package bot;
 
-import bot.commands.AddCommand;
-import bot.commands.TodayCommand;
-import bot.commands.StartCommand;
-import bot.commands.SysConstants;
+import bot.commands.*;
 import bot.keyboards.Keyboards;
 import db.JobLogHelper;
 import db.UsersHelper;
@@ -15,6 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import util.DateUtil;
@@ -34,6 +32,7 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
         register(new StartCommand());
         register(new TodayCommand());
         register(new AddCommand());
+        register(new CancelCommand());
     }
 
     @Override
@@ -82,60 +81,13 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
         int messageId = update.getCallbackQuery().getMessage().getMessageId();
 
         String[] parsedCallback = update.getCallbackQuery().getData().split(SysConstants.DELIMITER);
-        String value = parsedCallback[1];
 
         //edit JobLog
-        JobLogRaw jl = stateMap.get(userId);
-        if (jl != null) {
+        JobLogRaw jlr = stateMap.get(userId);
+        if (jlr != null) {
             switch (parsedCallback[0]) {
-                case SysConstants.DAYS_CALLBACK_TYPE:
-                    jl.setDayOfDate(value);
-                    editMessage(chatId, messageId, ReplyConstants.CHOOSE_MONTH, false,
-                            Keyboards.getKeyboard(SysConstants.MONTHS_CALLBACK_TYPE, SysConstants.MONTHS));
-                    stateMap.put(userId, jl);
-                    break;
-                case SysConstants.MONTHS_CALLBACK_TYPE:
-                    jl.setMonthOfDate(value);
-                    if (DateUtil.isDateCorrect(jl.getDayOfDate(), jl.getMonthOfDate())) {
-                        jl.setJobDate(DateUtil.parseDate(jl.getDayOfDate(), jl.getMonthOfDate()));
-                        editMessage(chatId, messageId, ReplyConstants.CHOOSE_INITIAL_HOUR, false,
-                                Keyboards.getKeyboard(SysConstants.INITIAL_HOURS_CALLBACK_TYPE, SysConstants.INITIAL_HOURS));
-                        stateMap.put(userId, jl);
-                    } else
-                        editMessage(chatId, messageId, MessageProvider.getDateIsErrorMessage(jl), false, null);
-                    break;
-                case SysConstants.INITIAL_HOURS_CALLBACK_TYPE:
-                    jl.setStartIntervalHours(value);
-                    editMessage(chatId, messageId, ReplyConstants.CHOOSE_INITIAL_MINUTES, false,
-                            Keyboards.getKeyboard(SysConstants.INITIAL_MINUTES_CALLBACK_TYPE, SysConstants.INITIAL_MINUTES));
-                    stateMap.put(userId, jl);
-                    break;
-                case SysConstants.INITIAL_MINUTES_CALLBACK_TYPE:
-                    jl.setStartIntervalMinutes(value);
-                    editMessage(chatId, messageId, ReplyConstants.CHOOSE_END_HOUR, false,
-                            Keyboards.getKeyboard(SysConstants.END_HOURS_CALLBACK_TYPE, SysConstants.END_HOURS));
-                    stateMap.put(userId, jl);
-                    break;
-                case SysConstants.END_HOURS_CALLBACK_TYPE:
-                    jl.setEndIntervalHours(value);
-                    editMessage(chatId, messageId, ReplyConstants.CHOOSE_END_MINUTES, false,
-                            Keyboards.getKeyboard(SysConstants.END_MINUTES_CALLBACK_TYPE, SysConstants.END_MINUTES));
-                    stateMap.put(userId, jl);
-                    break;
-                case SysConstants.END_MINUTES_CALLBACK_TYPE:
-                    jl.setEndIntervalMinutes(value);
-                    jl.setCompleted(true);
-                    JobLogHelper jlh = new JobLogHelper();
-                    UsersHelper uh = new UsersHelper();
-                    String userUuid = uh.findUserByTgId(userId.toString(), update.getCallbackQuery().getFrom(), chatId.toString());
-                    UUID uuid = jlh.saveJob(userUuid, jl);
-                    JobLog finalJobLog;
-                    if (uuid != null) {
-                        finalJobLog = jlh.getJob(uuid.toString());
-                        editMessage(chatId, messageId, MessageProvider.getJobLoggedMessage(finalJobLog), true, null);
-                    } else
-                        deleteMessage(chatId, messageId);
-                    stateMap.remove(userId);
+                case SysConstants.JOB_LOG_ROOT_CALLBACK_TYPE:
+                    processJobLogCallCallbackQuery(parsedCallback, jlr, userId, chatId, messageId, update.getCallbackQuery().getFrom());
                     break;
             }
 
@@ -143,6 +95,62 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
 
         } else {
             deleteMessage(chatId, messageId);
+        }
+    }
+
+    private void processJobLogCallCallbackQuery(String[] parsedCallback, JobLogRaw jlr, Long userId, Long chatId, int messageId, User user) {
+        String value = parsedCallback[2];
+
+        switch (parsedCallback[1]) {
+            case SysConstants.DAYS_CALLBACK_TYPE:
+                jlr.setDayOfDate(value);
+                editMessage(chatId, messageId, ReplyConstants.CHOOSE_MONTH, false,
+                        Keyboards.getKeyboard(SysConstants.JOB_LOG_ROOT_CALLBACK_TYPE, SysConstants.MONTHS_CALLBACK_TYPE, SysConstants.MONTHS));
+                stateMap.put(userId, jlr);
+                break;
+            case SysConstants.MONTHS_CALLBACK_TYPE:
+                jlr.setMonthOfDate(value);
+                if (DateUtil.isDateCorrect(jlr.getDayOfDate(), jlr.getMonthOfDate())) {
+                    jlr.setJobDate(DateUtil.parseDate(jlr.getDayOfDate(), jlr.getMonthOfDate()));
+                    editMessage(chatId, messageId, ReplyConstants.CHOOSE_INITIAL_HOUR, false,
+                            Keyboards.getKeyboard(SysConstants.JOB_LOG_ROOT_CALLBACK_TYPE, SysConstants.INITIAL_HOURS_CALLBACK_TYPE, SysConstants.INITIAL_HOURS));
+                    stateMap.put(userId, jlr);
+                } else
+                    editMessage(chatId, messageId, MessageProvider.getDateIsErrorMessage(jlr), false, null);
+                break;
+            case SysConstants.INITIAL_HOURS_CALLBACK_TYPE:
+                jlr.setStartIntervalHours(value);
+                editMessage(chatId, messageId, ReplyConstants.CHOOSE_INITIAL_MINUTES, false,
+                        Keyboards.getKeyboard(SysConstants.JOB_LOG_ROOT_CALLBACK_TYPE, SysConstants.INITIAL_MINUTES_CALLBACK_TYPE, SysConstants.INITIAL_MINUTES));
+                stateMap.put(userId, jlr);
+                break;
+            case SysConstants.INITIAL_MINUTES_CALLBACK_TYPE:
+                jlr.setStartIntervalMinutes(value);
+                editMessage(chatId, messageId, ReplyConstants.CHOOSE_END_HOUR, false,
+                        Keyboards.getKeyboard(SysConstants.JOB_LOG_ROOT_CALLBACK_TYPE, SysConstants.END_HOURS_CALLBACK_TYPE, SysConstants.END_HOURS));
+                stateMap.put(userId, jlr);
+                break;
+            case SysConstants.END_HOURS_CALLBACK_TYPE:
+                jlr.setEndIntervalHours(value);
+                editMessage(chatId, messageId, ReplyConstants.CHOOSE_END_MINUTES, false,
+                        Keyboards.getKeyboard(SysConstants.JOB_LOG_ROOT_CALLBACK_TYPE, SysConstants.END_MINUTES_CALLBACK_TYPE, SysConstants.END_MINUTES));
+                stateMap.put(userId, jlr);
+                break;
+            case SysConstants.END_MINUTES_CALLBACK_TYPE:
+                jlr.setEndIntervalMinutes(value);
+                jlr.setCompleted(true);
+                JobLogHelper jlh = new JobLogHelper();
+                UsersHelper uh = new UsersHelper();
+                String userUuid = uh.findUserByTgId(userId.toString(), user, chatId.toString());
+                UUID uuid = jlh.saveJob(userUuid, jlr);
+                JobLog finalJobLog;
+                if (uuid != null) {
+                    finalJobLog = jlh.getJob(uuid.toString());
+                    editMessage(chatId, messageId, MessageProvider.getJobLoggedMessage(finalJobLog), true, null);
+                } else
+                    deleteMessage(chatId, messageId);
+                stateMap.remove(userId);
+                break;
         }
     }
 
