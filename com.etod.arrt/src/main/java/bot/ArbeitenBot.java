@@ -1,9 +1,6 @@
 package bot;
 
-import bot.commands.AddCommand;
-import bot.commands.TodayCommand;
-import bot.commands.StartCommand;
-import bot.commands.SysConstants;
+import bot.commands.*;
 import bot.keyboards.Keyboards;
 import db.JobLogHelper;
 import db.UsersHelper;
@@ -35,6 +32,7 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
         register(new StartCommand());
         register(new TodayCommand());
         register(new AddCommand());
+        register(new CancelCommand());
     }
 
     @Override
