@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Keyboards {
 
-    public static InlineKeyboardMarkup getKeyboard(String callbackType, List<String> list) {
+    public static InlineKeyboardMarkup getKeyboard(String rootCallbackType, String callbackType, List<String> list) {
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
 
@@ -24,7 +24,7 @@ public class Keyboards {
                     for (String s : l) {
                         InlineKeyboardButton button = new InlineKeyboardButton();
                         button.setText(s);
-                        button.setCallbackData(callbackType + SysConstants.DELIMITER + s);
+                        button.setCallbackData(rootCallbackType + SysConstants.DELIMITER + callbackType + SysConstants.DELIMITER + s);
                         rowInline.add(button);
                     }
                     rowsInline.add(rowInline);

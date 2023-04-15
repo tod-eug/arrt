@@ -34,7 +34,7 @@ public class AddCommand implements IBotCommand {
             ArbeitenBot.stateMap.put(message.getFrom().getId(), jl);
 
             sm.setText(ReplyConstants.CHOOSE_DAY);
-            sm.setReplyMarkup(Keyboards.getKeyboard(SysConstants.DAYS_CALLBACK_TYPE, SysConstants.DAYS));
+            sm.setReplyMarkup(Keyboards.getKeyboard(SysConstants.JOB_LOG_ROOT_CALLBACK_TYPE, SysConstants.DAYS_CALLBACK_TYPE, SysConstants.DAYS));
         } else {
             sm.setText(ReplyConstants.NOT_ALLOWED);
         }

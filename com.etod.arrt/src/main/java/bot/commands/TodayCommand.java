@@ -37,7 +37,7 @@ public class TodayCommand implements IBotCommand {
             ArbeitenBot.stateMap.put(message.getFrom().getId(), jl);
 
             sm.setText(ReplyConstants.CHOOSE_INITIAL_HOUR);
-            sm.setReplyMarkup(Keyboards.getKeyboard(SysConstants.INITIAL_HOURS_CALLBACK_TYPE, SysConstants.INITIAL_HOURS));
+            sm.setReplyMarkup(Keyboards.getKeyboard(SysConstants.JOB_LOG_ROOT_CALLBACK_TYPE, SysConstants.INITIAL_HOURS_CALLBACK_TYPE, SysConstants.INITIAL_HOURS));
         } else {
             sm.setText(ReplyConstants.NOT_ALLOWED);
         }
