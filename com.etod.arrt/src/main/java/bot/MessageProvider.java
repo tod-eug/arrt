@@ -34,10 +34,10 @@ public class MessageProvider {
         SimpleDateFormat patternSimpleTime = new SimpleDateFormat(simpleTime);
 
         double sum = 0;
-        sb.append("Зафиксированы следующие часы работы: \n");
+        sb.append("Зафиксированы следующие часы работы: \n\n");
         for (JobLog jl : jls) {
-            sb.append(patternSimpleDate.format(jl.getJobDate())).append(" ").append(patternSimpleTime.format(jl.getStartInterval())).append(" - ").append(patternSimpleTime.format(jl.getEndInterval())).append(" \n")
-                    .append("Часов: ").append(jl.getHours()).append("\n");
+            sb.append(patternSimpleDate.format(jl.getJobDate())).append("   ").append(patternSimpleTime.format(jl.getStartInterval())).append(" - ").append(patternSimpleTime.format(jl.getEndInterval())).append("    ")
+                    .append("<b>").append(jl.getHours()).append("</b> ч.\n");
             sum = sum + jl.getHours();
         }
 

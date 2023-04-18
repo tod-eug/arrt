@@ -66,13 +66,14 @@ public class DateUtil {
         return jobDate;
     }
 
-    public static List<String> getCurrentAndPreviousMonthsStrings() {
+    public static List<String> getMonthsAsStrings(int monthsAmount) {
         List<String> result = new ArrayList<>();
 
         Date d = new Date();
         int month = d.getMonth();
-        result.add(getMonthName(month - 1));
-        result.add(getMonthName(month));
+        for (int i = monthsAmount - 1; i >= 0; i--) {
+            result.add(getMonthName(month - i));
+        }
         return result;
     }
 
@@ -126,6 +127,9 @@ public class DateUtil {
     }
 
     private static String getMonthName(int month) {
+        while (month < 0) {
+            month = month + 12;
+        }
         switch (month) {
             case 0:
                 return "Январь";

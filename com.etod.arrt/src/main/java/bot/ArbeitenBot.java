@@ -160,7 +160,7 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
                 String userUuid = uh.findUserByTgId(userId.toString(), user, chatId.toString());
                 List<JobLog> jls = jlh.getJobs(userUuid, map.get(1), map.get(2));
 
-                editMessage(chatId, messageId, MessageProvider.getMonthReportMessage(jls), false, null);
+                editMessage(chatId, messageId, MessageProvider.getMonthReportMessage(jls), true, null);
                 break;
         }
     }

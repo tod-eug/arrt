@@ -30,7 +30,7 @@ public class ReportCommand implements IBotCommand {
         if (PermissionsChecker.isAllowed(message.getFrom().getId())) {
 
             sm.setText(ReplyConstants.WHAT_PERIOD_FOR_REPORT);
-            sm.setReplyMarkup(Keyboards.getKeyboard(SysConstants.REPORT_ROOT_CALLBACK_TYPE, SysConstants.REPORT_PR_MONTH_CALLBACK_TYPE, DateUtil.getCurrentAndPreviousMonthsStrings()));
+            sm.setReplyMarkup(Keyboards.getKeyboard(SysConstants.REPORT_ROOT_CALLBACK_TYPE, SysConstants.REPORT_PR_MONTH_CALLBACK_TYPE, DateUtil.getMonthsAsStrings(5)));
         } else {
             sm.setText(ReplyConstants.NOT_ALLOWED);
         }
