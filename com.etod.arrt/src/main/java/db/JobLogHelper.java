@@ -54,7 +54,7 @@ public class JobLogHelper {
         String startInterval = timeIntervalPattern.format(from);
         String endInterval = timeIntervalPattern.format(to);
 
-        String selectQuery = String.format("select * from public.job_history where user_id = '%s' and start_time > '%s' and end_time < '%s';", userId, startInterval, endInterval);
+        String selectQuery = String.format("select * from public.job_history where user_id = '%s' and start_time >= '%s' and end_time <= '%s' order by date;", userId, startInterval, endInterval);
 
         DatabaseHelper dbHelper = new DatabaseHelper();
         try {

@@ -10,4 +10,5 @@ public interface ReplyConstants {
     String CHOOSE_DAY = "Выберите день внесения отработанного времени";
     String CHOOSE_MONTH = "Выберите месяц внесения отработанного времени";
     String DATE_ERROR = "Вы ошиблись в выборе даты";
+    String WHAT_PERIOD_FOR_RESULTS = "За какой месяц хотите получить отчет?";
 }

@@ -7,8 +7,7 @@ import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
@@ -67,6 +66,35 @@ public class DateUtil {
         return jobDate;
     }
 
+    public static List<String> getMonthsAsStrings(int monthsAmount) {
+        List<String> result = new ArrayList<>();
+
+        Date d = new Date();
+        int month = d.getMonth();
+        for (int i = monthsAmount - 1; i >= 0; i--) {
+            result.add(getMonthName(month - i));
+        }
+        return result;
+    }
+
+    public static Map<Integer, Date> getStartEndByMonthString(String monthS) {
+        Map<Integer, Date> result = new HashMap<>();
+
+        Date start = new Date();
+        start = DateUtils.truncate(start, Calendar.DAY_OF_MONTH);
+        start = DateUtils.setDays(start, 1);
+        start = DateUtils.setMonths(start, parseMonth(monthS.substring(0, 3)));
+
+        Date end = new Date();
+        end = DateUtils.truncate(end, Calendar.DAY_OF_MONTH);
+        end = DateUtils.setMonths(end, parseMonth(monthS.substring(0, 3)));
+        end = DateUtils.setDays(end, getLastDayOfMonth(parseMonth(monthS.substring(0, 3))));
+
+        result.put(1, start);
+        result.put(2, end);
+        return result;
+    }
+
     private static int parseMonth(String month) {
         switch (month) {
             case "Янв":
@@ -95,6 +123,54 @@ public class DateUtil {
                 return 11;
             default:
                 return -1;
+        }
+    }
+
+    private static String getMonthName(int month) {
+        while (month < 0) {
+            month = month + 12;
+        }
+        switch (month) {
+            case 0:
+                return "Январь";
+            case 1:
+                return "Февраль";
+            case 2:
+                return "Март";
+            case 3:
+                return "Апрель";
+            case 4:
+                return "Май";
+            case 5:
+                return "Июнь";
+            case 6:
+                return "Июль";
+            case 7:
+                return "Август";
+            case 8:
+                return "Сентябрь";
+            case 9:
+                return "Октябрь";
+            case 10:
+                return "Ноябрь";
+            case 11:
+                return "Декабрь";
+            default:
+                return "";
+        }
+    }
+
+    private static int getLastDayOfMonth(int month) {
+        switch (month) {
+            case 1:
+                return 28;
+            case 3:
+            case 5:
+            case 8:
+            case 10:
+                return 30;
+            default:
+                return 31;
         }
     }
 }

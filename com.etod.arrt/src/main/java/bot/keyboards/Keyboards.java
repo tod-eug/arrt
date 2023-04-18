@@ -10,14 +10,21 @@ import java.util.List;
 
 public class Keyboards {
 
+    public static final int buttonsInLineDefault = 5;
+    public static final int buttonsInLineMonthsNames = 3;
+
+
     public static InlineKeyboardMarkup getKeyboard(String rootCallbackType, String callbackType, List<String> list) {
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
 
         if (list != null) {
             if (!list.isEmpty()) {
+                int buttonsInLine = buttonsInLineDefault;
+                if (callbackType.equals(SysConstants.RESULTS_PR_MONTH_CALLBACK_TYPE))
+                    buttonsInLine = buttonsInLineMonthsNames;
 
-                List<List<String>> dividedList = ListUtils.partition(list, 5);
+                List<List<String>> dividedList = ListUtils.partition(list, buttonsInLine);
 
                 for (List<String> l : dividedList) {
                     List<InlineKeyboardButton> rowInline = new ArrayList<>();
