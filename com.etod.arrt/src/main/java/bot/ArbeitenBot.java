@@ -29,7 +29,7 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
         register(new StartCommand());
         register(new TodayCommand());
         register(new AddCommand());
-        register(new ReportCommand());
+        register(new ResultsCommand());
         register(new CancelCommand());
     }
 
@@ -84,7 +84,7 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
                 case SysConstants.JOB_LOG_ROOT_CALLBACK_TYPE:
                     processJobLogCallCallbackQuery(parsedCallback, userId, chatId, messageId, update.getCallbackQuery().getFrom());
                     break;
-                case SysConstants.REPORT_ROOT_CALLBACK_TYPE:
+                case SysConstants.RESULTS_ROOT_CALLBACK_TYPE:
                     processReportCallbackQuery(parsedCallback, userId, chatId, messageId, update.getCallbackQuery().getFrom());
                     break;
             }
@@ -153,14 +153,14 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
 
     private void processReportCallbackQuery(String[] parsedCallback, Long userId, Long chatId, int messageId, User user) {
         switch (parsedCallback[1]) {
-            case SysConstants.REPORT_PR_MONTH_CALLBACK_TYPE:
+            case SysConstants.RESULTS_PR_MONTH_CALLBACK_TYPE:
                 JobLogHelper jlh = new JobLogHelper();
                 UsersHelper uh = new UsersHelper();
                 Map<Integer, Date> map = DateUtil.getStartEndByMonthString(parsedCallback[2]);
                 String userUuid = uh.findUserByTgId(userId.toString(), user, chatId.toString());
                 List<JobLog> jls = jlh.getJobs(userUuid, map.get(1), map.get(2));
 
-                editMessage(chatId, messageId, MessageProvider.getMonthReportMessage(jls), true, null);
+                editMessage(chatId, messageId, MessageProvider.getMonthResultsMessage(jls), true, null);
                 break;
         }
     }

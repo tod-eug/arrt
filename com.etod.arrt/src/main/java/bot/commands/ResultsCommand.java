@@ -10,15 +10,15 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import util.DateUtil;
 
-public class ReportCommand implements IBotCommand {
+public class ResultsCommand implements IBotCommand {
     @Override
     public String getCommandIdentifier() {
-        return "report";
+        return "results";
     }
 
     @Override
     public String getDescription() {
-        return "report";
+        return "results";
     }
 
     @Override
@@ -29,8 +29,8 @@ public class ReportCommand implements IBotCommand {
 
         if (PermissionsChecker.isAllowed(message.getFrom().getId())) {
 
-            sm.setText(ReplyConstants.WHAT_PERIOD_FOR_REPORT);
-            sm.setReplyMarkup(Keyboards.getKeyboard(SysConstants.REPORT_ROOT_CALLBACK_TYPE, SysConstants.REPORT_PR_MONTH_CALLBACK_TYPE, DateUtil.getMonthsAsStrings(5)));
+            sm.setText(ReplyConstants.WHAT_PERIOD_FOR_RESULTS);
+            sm.setReplyMarkup(Keyboards.getKeyboard(SysConstants.RESULTS_ROOT_CALLBACK_TYPE, SysConstants.RESULTS_PR_MONTH_CALLBACK_TYPE, DateUtil.getMonthsAsStrings(5)));
         } else {
             sm.setText(ReplyConstants.NOT_ALLOWED);
         }

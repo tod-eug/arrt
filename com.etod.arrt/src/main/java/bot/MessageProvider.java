@@ -28,7 +28,7 @@ public class MessageProvider {
                 .append("У месяца ").append(jlr.getMonthOfDate()).append(" нет дня ").append(jlr.getDayOfDate()).toString();
     }
 
-    public static String getMonthReportMessage(List<JobLog> jls) {
+    public static String getMonthResultsMessage(List<JobLog> jls) {
         StringBuilder sb = new StringBuilder();
         SimpleDateFormat patternSimpleDate = new SimpleDateFormat(simpleDate);
         SimpleDateFormat patternSimpleTime = new SimpleDateFormat(simpleTime);
