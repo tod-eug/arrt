@@ -23,6 +23,7 @@ public interface SysConstants {
     String END_MINUTES_CALLBACK_TYPE = "endmins";
     String DAYS_CALLBACK_TYPE = "datedays";
     String MONTHS_CALLBACK_TYPE = "datemonths";
-    String RESULTS_PR_MONTH_CALLBACK_TYPE = "previousmonth";
+    String RESULTS_CALLBACK_TYPE = "results";
+    String REPORT_CALLBACK_TYPE = "report";
 
 }

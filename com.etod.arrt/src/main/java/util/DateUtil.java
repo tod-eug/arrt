@@ -41,9 +41,17 @@ public class DateUtil {
         int day = Integer.parseInt(dayS);
         int month = parseMonth(monthS);
         jobDate = DateUtils.truncate(jobDate, Calendar.DAY_OF_MONTH);
-        jobDate = DateUtils.setDays(jobDate, day);
-        jobDate = DateUtils.setMonths(jobDate, month);
+        jobDate.setDate(day);
+        jobDate.setMonth(month);
         return jobDate;
+    }
+
+    public static Date getDate(int day, int month) {
+        Date d = new Date();
+        d = DateUtils.truncate(d, Calendar.DAY_OF_MONTH);
+        d.setMonth(month);
+        d.setDate(day);
+        return d;
     }
 
     public static String calculateHours(Date startDate, Date endDate) {
@@ -82,13 +90,13 @@ public class DateUtil {
 
         Date start = new Date();
         start = DateUtils.truncate(start, Calendar.DAY_OF_MONTH);
-        start = DateUtils.setDays(start, 1);
-        start = DateUtils.setMonths(start, parseMonth(monthS.substring(0, 3)));
+        start.setDate(1);
+        start.setMonth(parseMonth(monthS.substring(0, 3)));
 
         Date end = new Date();
         end = DateUtils.truncate(end, Calendar.DAY_OF_MONTH);
-        end = DateUtils.setMonths(end, parseMonth(monthS.substring(0, 3)));
-        end = DateUtils.setDays(end, getLastDayOfMonth(parseMonth(monthS.substring(0, 3))));
+        end.setMonth(parseMonth(monthS.substring(0, 3)));
+        end.setDate(getLastDayOfMonth(parseMonth(monthS.substring(0, 3))));
 
         result.put(1, start);
         result.put(2, end);
@@ -126,7 +134,7 @@ public class DateUtil {
         }
     }
 
-    private static String getMonthName(int month) {
+    public static String getMonthName(int month) {
         while (month < 0) {
             month = month + 12;
         }
@@ -160,7 +168,7 @@ public class DateUtil {
         }
     }
 
-    private static int getLastDayOfMonth(int month) {
+    public static int getLastDayOfMonth(int month) {
         switch (month) {
             case 1:
                 return 28;
@@ -172,5 +180,29 @@ public class DateUtil {
             default:
                 return 31;
         }
+    }
+
+    public static String getDayOfTheWeek(Date d) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        switch (cal.get(Calendar.DAY_OF_WEEK)) {
+            case 1:
+                return "Пн";
+            case 2:
+                return "Вт";
+            case 3:
+                return "Ср";
+            case 4:
+                return "Чт";
+            case 5:
+                return "Пт";
+            case 6:
+                return "Сб";
+            case 7:
+                return "Вс";
+            default:
+                return "";
+        }
+
     }
 }

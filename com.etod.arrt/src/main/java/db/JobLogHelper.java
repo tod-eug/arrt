@@ -45,9 +45,9 @@ public class JobLogHelper {
         return id;
     }
 
-    public List<JobLog> getJobs(String userId, Date from, Date to) {
+    public Map<Date, JobLog> getJobs(String userId, Date from, Date to) {
 
-        List<JobLog> result = new ArrayList<>();
+        Map<Date, JobLog> result = new HashMap<>();
         JobLogMapper jlm = new JobLogMapper();
         SimpleDateFormat timeIntervalPattern = new SimpleDateFormat(DatabaseHelper.timeIntervalPattern);
 
@@ -60,7 +60,8 @@ public class JobLogHelper {
         try {
             ResultSet st = dbHelper.getPreparedStatement(selectQuery).executeQuery();
             while(st.next()) {
-                result.add(jlm.mapJobLog(st.getString("date"), st.getString("start_time"), st.getString("end_time"), st.getString("hours")));
+                result.put(st.getDate("date"), jlm.mapJobLog(st.getString("date"), st.getString("start_time"), st.getString("end_time"), st.getString("hours")));
+//                result.add(jlm.mapJobLog(st.getString("date"), st.getString("start_time"), st.getString("end_time"), st.getString("hours")));
             }
         } catch (SQLException e) {
             e.printStackTrace();

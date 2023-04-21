@@ -4,7 +4,9 @@ import dto.JobLog;
 import dto.JobLogRaw;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
+import java.util.Date;
+import java.util.Map;
+import java.util.Set;
 
 public class MessageProvider {
 
@@ -28,14 +30,17 @@ public class MessageProvider {
                 .append("У месяца ").append(jlr.getMonthOfDate()).append(" нет дня ").append(jlr.getDayOfDate()).toString();
     }
 
-    public static String getMonthResultsMessage(List<JobLog> jls) {
+    public static String getMonthResultsMessage(Map<Date, JobLog> jls) {
         StringBuilder sb = new StringBuilder();
         SimpleDateFormat patternSimpleDate = new SimpleDateFormat(simpleDate);
         SimpleDateFormat patternSimpleTime = new SimpleDateFormat(simpleTime);
 
         double sum = 0;
         sb.append("Зафиксированы следующие часы работы: \n\n");
-        for (JobLog jl : jls) {
+        Set<Date> set = jls.keySet();
+
+        for (Date d : set) {
+            JobLog jl = jls.get(d);
             sb.append(patternSimpleDate.format(jl.getJobDate())).append("   ").append(patternSimpleTime.format(jl.getStartInterval())).append(" - ").append(patternSimpleTime.format(jl.getEndInterval())).append("    ")
                     .append("<b>").append(jl.getHours()).append("</b> ч.\n");
             sum = sum + jl.getHours();

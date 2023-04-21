@@ -8,16 +8,20 @@ import dto.JobLog;
 import dto.JobLogRaw;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import output.pdf.PdfsWriter;
 import util.DateUtil;
 import util.PropertiesProvider;
 
+import java.io.File;
 import java.util.*;
 
 public class ArbeitenBot extends TelegramLongPollingCommandBot {
@@ -30,6 +34,7 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
         register(new TodayCommand());
         register(new AddCommand());
         register(new ResultsCommand());
+        register(new ReportCommand());
         register(new CancelCommand());
     }
 
@@ -152,15 +157,32 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
     }
 
     private void processReportCallbackQuery(String[] parsedCallback, Long userId, Long chatId, int messageId, User user) {
-        switch (parsedCallback[1]) {
-            case SysConstants.RESULTS_PR_MONTH_CALLBACK_TYPE:
-                JobLogHelper jlh = new JobLogHelper();
-                UsersHelper uh = new UsersHelper();
-                Map<Integer, Date> map = DateUtil.getStartEndByMonthString(parsedCallback[2]);
-                String userUuid = uh.findUserByTgId(userId.toString(), user, chatId.toString());
-                List<JobLog> jls = jlh.getJobs(userUuid, map.get(1), map.get(2));
+        JobLogHelper jlh = new JobLogHelper();
+        UsersHelper uh = new UsersHelper();
+        Map<Integer, Date> map = DateUtil.getStartEndByMonthString(parsedCallback[2]);
+        String userUuid = uh.findUserByTgId(userId.toString(), user, chatId.toString());
+        Map<Date, JobLog> jls = jlh.getJobs(userUuid, map.get(1), map.get(2));
 
+        switch (parsedCallback[1]) {
+            case SysConstants.RESULTS_CALLBACK_TYPE:
                 editMessage(chatId, messageId, MessageProvider.getMonthResultsMessage(jls), true, null);
+                break;
+            case SysConstants.REPORT_CALLBACK_TYPE:
+                PdfsWriter pdfsWriter = new PdfsWriter();
+                File file = pdfsWriter.writePdfFile("test.pdf", jls);
+                if (file != null) {
+                    InputFile inputFile = new InputFile(file);
+
+                    SendDocument document = new SendDocument();
+                    document.setChatId(chatId);
+                    document.setDocument(inputFile);
+                    document.setCaption(file.getName());
+                    try {
+                        execute(document);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                }
                 break;
         }
     }
