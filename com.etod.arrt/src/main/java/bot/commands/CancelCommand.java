@@ -19,11 +19,11 @@ public class CancelCommand implements IBotCommand {
 
     @Override
     public void processMessage(AbsSender absSender, Message message, String[] arguments) {
-        MessageProcessor mp = new MessageProcessor();
+
         ArbeitenBot.stateMap.remove(message.getFrom().getId());
         DeleteMessage dm = new DeleteMessage();
         dm.setChatId(message.getChatId());
         dm.setMessageId(message.getMessageId());
-        mp.deleteMsg(absSender, dm);
+        MessageProcessor.deleteMsg(absSender, dm);
     }
 }

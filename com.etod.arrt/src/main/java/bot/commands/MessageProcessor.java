@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class MessageProcessor {
 
-    protected void sendMsg(AbsSender absSender, SendMessage sm) {
+    protected static void sendMsg(AbsSender absSender, SendMessage sm) {
         try {
             absSender.execute(sm);
         } catch (TelegramApiException e) {
@@ -15,7 +15,7 @@ public class MessageProcessor {
         }
     }
 
-    protected int sendAndReturnMessageID(AbsSender absSender, SendMessage sm) {
+    protected static int sendAndReturnMessageID(AbsSender absSender, SendMessage sm) {
         int messageId = 0;
         try {
             messageId = absSender.execute(sm).getMessageId();
@@ -25,7 +25,7 @@ public class MessageProcessor {
         return messageId;
     }
 
-    protected void deleteMsg(AbsSender absSender, DeleteMessage dm) {
+    protected static void deleteMsg(AbsSender absSender, DeleteMessage dm) {
         try {
             absSender.execute(dm);
         } catch (TelegramApiException e) {

@@ -19,8 +19,7 @@ public class PdfsWriter {
         Date startInterval = interval.get(1);
         String fileName = DateUtil.getPeriodStringEng(startInterval) + ".pdf";
 
-        FileUtils fileUtils = new FileUtils();
-        File file = fileUtils.writePdfFile(fileName);
+        File file = FileUtils.writePdfFile(fileName);
 
         Document document = new Document();
         try {

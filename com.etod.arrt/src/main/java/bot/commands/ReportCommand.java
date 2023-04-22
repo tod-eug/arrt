@@ -23,7 +23,7 @@ public class ReportCommand implements IBotCommand {
 
     @Override
     public void processMessage(AbsSender absSender, Message message, String[] arguments) {
-        MessageProcessor mp = new MessageProcessor();
+
         SendMessage sm = new SendMessage();
         sm.setChatId(message.getChatId());
 
@@ -35,10 +35,10 @@ public class ReportCommand implements IBotCommand {
             sm.setText(ReplyConstants.NOT_ALLOWED);
         }
 
-        mp.sendMsg(absSender, sm);
+        MessageProcessor.sendMsg(absSender, sm);
         DeleteMessage dm = new DeleteMessage();
         dm.setChatId(message.getChatId());
         dm.setMessageId(message.getMessageId());
-        mp.deleteMsg(absSender, dm);
+        MessageProcessor.deleteMsg(absSender, dm);
     }
 }

@@ -21,9 +21,9 @@ public class StartCommand implements IBotCommand {
 
     @Override
     public void processMessage(AbsSender absSender, Message message, String[] arguments) {
+
         String userId = UsersHelper.findUserByTgId(message.getFrom().getId().toString(), message.getFrom(), message.getChatId().toString());
 
-        MessageProcessor mp = new MessageProcessor();
         SendMessage sm = new SendMessage();
         sm.setChatId(message.getChatId());
 
@@ -32,6 +32,6 @@ public class StartCommand implements IBotCommand {
         else
             sm.setText(ReplyConstants.START_REPLY_WELCOME + ReplyConstants.NOT_ALLOWED);
 
-        mp.sendMsg(absSender, sm);
+        MessageProcessor.sendMsg(absSender, sm);
     }
 }
