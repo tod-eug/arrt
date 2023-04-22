@@ -159,7 +159,7 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
     private void processReportCallbackQuery(String[] parsedCallback, Long userId, Long chatId, int messageId, User user) {
         JobLogHelper jlh = new JobLogHelper();
         UsersHelper uh = new UsersHelper();
-        Map<Integer, Date> map = DateUtil.getStartEndByMonthString(parsedCallback[2]);
+        Map<Integer, Date> map = DateUtil.getMonthIntervalString(parsedCallback[2]);
         String userUuid = uh.findUserByTgId(userId.toString(), user, chatId.toString());
         Map<Date, JobLog> jls = jlh.getJobs(userUuid, map.get(1), map.get(2));
 

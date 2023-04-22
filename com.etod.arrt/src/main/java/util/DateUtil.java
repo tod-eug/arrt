@@ -85,7 +85,7 @@ public class DateUtil {
         return result;
     }
 
-    public static Map<Integer, Date> getStartEndByMonthString(String monthS) {
+    public static Map<Integer, Date> getMonthIntervalString(String monthS) {
         Map<Integer, Date> result = new HashMap<>();
 
         Date start = new Date();
@@ -95,8 +95,9 @@ public class DateUtil {
 
         Date end = new Date();
         end = DateUtils.truncate(end, Calendar.DAY_OF_MONTH);
-        end.setMonth(parseMonth(monthS.substring(0, 3)));
-        end.setDate(getLastDayOfMonth(parseMonth(monthS.substring(0, 3))));
+        end.setDate(1);
+        end.setMonth(parseMonth(monthS.substring(0, 3)) + 1);
+
 
         result.put(1, start);
         result.put(2, end);
