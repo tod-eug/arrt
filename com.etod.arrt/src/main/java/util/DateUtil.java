@@ -80,7 +80,7 @@ public class DateUtil {
         Date d = new Date();
         int month = d.getMonth();
         for (int i = monthsAmount - 1; i >= 0; i--) {
-            result.add(getMonthName(month - i));
+            result.add(getMonthNameRus(month - i));
         }
         return result;
     }
@@ -135,7 +135,7 @@ public class DateUtil {
         }
     }
 
-    public static String getMonthName(int month) {
+    public static String getMonthNameRus(int month) {
         while (month < 0) {
             month = month + 12;
         }
@@ -164,6 +164,40 @@ public class DateUtil {
                 return "Ноябрь";
             case 11:
                 return "Декабрь";
+            default:
+                return "";
+        }
+    }
+
+    public static String getMonthNameEng(int month) {
+        while (month < 0) {
+            month = month + 12;
+        }
+        switch (month) {
+            case 0:
+                return "January";
+            case 1:
+                return "February";
+            case 2:
+                return "March";
+            case 3:
+                return "April";
+            case 4:
+                return "May";
+            case 5:
+                return "June";
+            case 6:
+                return "July";
+            case 7:
+                return "August";
+            case 8:
+                return "September";
+            case 9:
+                return "October";
+            case 10:
+                return "November";
+            case 11:
+                return "December";
             default:
                 return "";
         }
@@ -204,6 +238,15 @@ public class DateUtil {
             default:
                 return "";
         }
+    }
 
+    public static String getPeriodString(Date d) {
+        int year = d.getYear() + 1900;
+        return getMonthNameRus(d.getMonth()) + " " + year;
+    }
+
+    public static String getPeriodStringEng(Date d) {
+        int year = d.getYear() + 1900;
+        return getMonthNameEng(d.getMonth()) + " " + year;
     }
 }

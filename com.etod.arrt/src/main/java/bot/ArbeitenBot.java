@@ -169,14 +169,14 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
                 break;
             case SysConstants.REPORT_CALLBACK_TYPE:
                 PdfsWriter pdfsWriter = new PdfsWriter();
-                File file = pdfsWriter.writePdfFile("test.pdf", jls);
+                File file = pdfsWriter.writePdfFile(map, jls);
                 if (file != null) {
                     InputFile inputFile = new InputFile(file);
 
                     SendDocument document = new SendDocument();
                     document.setChatId(chatId);
                     document.setDocument(inputFile);
-                    document.setCaption(file.getName());
+                    document.setCaption(MessageProvider.getReportMessage(map.get(1)));
                     try {
                         execute(document);
                     } catch (TelegramApiException e) {

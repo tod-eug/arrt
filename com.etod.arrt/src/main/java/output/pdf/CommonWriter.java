@@ -20,11 +20,9 @@ public class CommonWriter {
 
     public static final Double pricePerHour = 13d;
 
-    public static Document writeHeader(Document document, Map<Date, JobLog> jls) {
+    public static Document writeHeader(Document document, Date startInterval) {
 
         PhraseProvider pp = new PhraseProvider();
-        String month = DateUtil.getMonthName(jls.entrySet().iterator().next().getKey().getMonth());
-        int year = jls.entrySet().iterator().next().getKey().getYear() + 1900;
 
         Paragraph p1 = new Paragraph();
         p1.add(pp.getPhraseHeadline(employerHeadLine));
@@ -35,7 +33,7 @@ public class CommonWriter {
         p2.setPaddingTop(10f);
         Paragraph p3 = new Paragraph();
         p3.add(pp.getPhraseHeadline(periodHeadLine));
-        p3.add(pp.getPhraseHeadlineItalic(month + " " + year));
+        p3.add(pp.getPhraseHeadlineItalic(DateUtil.getPeriodString(startInterval)));
         p3.setPaddingTop(10f);
 
         try {

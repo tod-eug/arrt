@@ -19,7 +19,7 @@ public class JobLogWriter {
     public static List<String> hours = Arrays.asList("6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18");
     public static List<String> minutes = Arrays.asList("0", "15", "30", "45");
 
-    public static Document writeJobLogs(Document document, Map<Date, JobLog> jls) {
+    public static Document writeJobLogs(Document document, Map<Date, JobLog> jls, Map<Integer, Date> interval) {
 
         PdfPTable table = new PdfPTable(new float[] { 4f, 1.5f,
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -31,7 +31,7 @@ public class JobLogWriter {
         });
         table.setWidthPercentage(100);
         addTableHeader(table);
-        addMonthJobLogs(table, jls);
+        addMonthJobLogs(table, jls, interval);
 
 
         try {
@@ -55,13 +55,13 @@ public class JobLogWriter {
         }
     }
 
-    private static void addMonthJobLogs(PdfPTable table, Map<Date, JobLog> jls) {
+    private static void addMonthJobLogs(PdfPTable table, Map<Date, JobLog> jls, Map<Integer, Date> interval) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
         SimpleDateFormat simpleFormat = new SimpleDateFormat(simpleTime);
         CellsProvider cellsProvider = new CellsProvider();
 
         Set<Date> dates = jls.keySet();
-        int month = jls.entrySet().iterator().next().getKey().getMonth();
+        int month = interval.get(1).getMonth();
 
         //get month days
         int monthStartDate = 1;

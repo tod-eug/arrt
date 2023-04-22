@@ -61,7 +61,6 @@ public class JobLogHelper {
             ResultSet st = dbHelper.getPreparedStatement(selectQuery).executeQuery();
             while(st.next()) {
                 result.put(st.getDate("date"), jlm.mapJobLog(st.getString("date"), st.getString("start_time"), st.getString("end_time"), st.getString("hours")));
-//                result.add(jlm.mapJobLog(st.getString("date"), st.getString("start_time"), st.getString("end_time"), st.getString("hours")));
             }
         } catch (SQLException e) {
             e.printStackTrace();

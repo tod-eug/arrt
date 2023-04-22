@@ -5,8 +5,7 @@ import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.BaseFont;
 
-import static com.itextpdf.text.Font.BOLD;
-import static com.itextpdf.text.Font.ITALIC;
+import static com.itextpdf.text.Font.*;
 
 public class PhraseProvider {
 

@@ -2,6 +2,7 @@ package bot;
 
 import dto.JobLog;
 import dto.JobLogRaw;
+import util.DateUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,7 +48,10 @@ public class MessageProvider {
         }
 
         sb.append("\n").append("Общее количество часов: ").append(sum);
-
         return sb.toString();
+    }
+
+    public static String getReportMessage(Date startInterval) {
+        return "Отчет отработанного времени " + DateUtil.getPeriodString(startInterval);
     }
 }
