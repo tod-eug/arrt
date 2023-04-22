@@ -22,18 +22,16 @@ public class CommonWriter {
 
     public static Document writeHeader(Document document, Date startInterval) {
 
-        PhraseProvider pp = new PhraseProvider();
-
         Paragraph p1 = new Paragraph();
-        p1.add(pp.getPhraseHeadline(employerHeadLine));
-        p1.add(pp.getPhraseHeadlineItalic(employerName));
+        p1.add(PhraseProvider.getPhraseHeadline(employerHeadLine));
+        p1.add(PhraseProvider.getPhraseHeadlineItalic(employerName));
         Paragraph p2 = new Paragraph();
-        p2.add(pp.getPhraseHeadline(employeeHeadLine));
-        p2.add(pp.getPhraseHeadlineItalic(employeeName));
+        p2.add(PhraseProvider.getPhraseHeadline(employeeHeadLine));
+        p2.add(PhraseProvider.getPhraseHeadlineItalic(employeeName));
         p2.setPaddingTop(10f);
         Paragraph p3 = new Paragraph();
-        p3.add(pp.getPhraseHeadline(periodHeadLine));
-        p3.add(pp.getPhraseHeadlineItalic(DateUtil.getPeriodString(startInterval)));
+        p3.add(PhraseProvider.getPhraseHeadline(periodHeadLine));
+        p3.add(PhraseProvider.getPhraseHeadlineItalic(DateUtil.getPeriodString(startInterval)));
         p3.setPaddingTop(10f);
 
         try {
@@ -50,8 +48,6 @@ public class CommonWriter {
 
     public static Document writeFooter(Document document, Map<Date, JobLog> jls) {
 
-        PhraseProvider pp = new PhraseProvider();
-
         Double hoursSum = 0d;
         Set<Date> set = jls.keySet();
 
@@ -63,20 +59,20 @@ public class CommonWriter {
         Double sum = hoursSum * pricePerHour;
 
         Paragraph p1 = new Paragraph();
-        p1.add(pp.getPhraseHeadline("Общее количество часов: "));
-        p1.add(pp.getPhraseHeadlineItalic(hoursSum.toString()));
-        p1.add(pp.getPhraseHeadlineItalic(" ч."));
+        p1.add(PhraseProvider.getPhraseHeadline("Общее количество часов: "));
+        p1.add(PhraseProvider.getPhraseHeadlineItalic(hoursSum.toString()));
+        p1.add(PhraseProvider.getPhraseHeadlineItalic(" ч."));
 
         Paragraph p2 = new Paragraph();
-        p2.add(pp.getPhraseHeadline("Часовая ставка: "));
-        p2.add(pp.getPhraseHeadlineItalic(pricePerHour.toString()));
-        p2.add(pp.getPhraseHeadlineItalic(" Eur"));
+        p2.add(PhraseProvider.getPhraseHeadline("Часовая ставка: "));
+        p2.add(PhraseProvider.getPhraseHeadlineItalic(pricePerHour.toString()));
+        p2.add(PhraseProvider.getPhraseHeadlineItalic(" Eur"));
         p2.setPaddingTop(10f);
 
         Paragraph p3 = new Paragraph();
-        p3.add(pp.getPhraseHeadline("Общая сумма: "));
-        p3.add(pp.getPhraseHeadlineItalic(sum.toString()));
-        p3.add(pp.getPhraseHeadlineItalic(" Eur"));
+        p3.add(PhraseProvider.getPhraseHeadline("Общая сумма: "));
+        p3.add(PhraseProvider.getPhraseHeadlineItalic(sum.toString()));
+        p3.add(PhraseProvider.getPhraseHeadlineItalic(" Eur"));
         p3.setPaddingTop(10f);
 
         try {

@@ -15,38 +15,38 @@ public class PhraseProvider {
     private static final Integer ROW_FONT_SIZE = 8;
     private static final Integer HEADLINE_FONT_SIZE = 11;
 
-    public Font getFont(int size) {
+    public static Font getFont(int size) {
         Font font = FontFactory.getFont(ARIAL, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         font.setSize(size);
         return font;
     }
 
-    public Phrase getPhraseHeader(String content) {
+    public static Phrase getPhraseHeader(String content) {
         Font font = getFont(HEADER_FONT_SIZE);
         font.setStyle(BOLD);
         return new Phrase(content, font);
     }
 
-    public Phrase getPhraseRowHeader(String content) {
+    public static Phrase getPhraseRowHeader(String content) {
         return new Phrase(content, getFont(ROW_HEADER_FONT_SIZE));
     }
 
-    public Phrase getPhraseRow(String content) {
+    public static Phrase getPhraseRow(String content) {
         return new Phrase(content, getFont(ROW_FONT_SIZE));
     }
 
-    public Phrase getPhraseHeadline(String content) {
+    public static Phrase getPhraseHeadline(String content) {
         Font font = getFont(HEADLINE_FONT_SIZE);
         return new Phrase(content, font);
     }
 
-    public Phrase getPhraseHeadlineItalic(String content) {
+    public static Phrase getPhraseHeadlineItalic(String content) {
         Font font = getFont(HEADLINE_FONT_SIZE);
         font.setStyle(ITALIC);
         return new Phrase(content, font);
     }
 
-    public Phrase getPhraseHeadlineBold(String content) {
+    public static Phrase getPhraseHeadlineBold(String content) {
         Font font = getFont(HEADLINE_FONT_SIZE);
         font.setStyle(BOLD);
         return new Phrase(content, font);

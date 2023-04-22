@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class PdfsWriter {
 
-    public File writePdfFile(Map<Integer, Date> interval, Map<Date, JobLog> jls) {
+    public static File writePdfFile(Map<Integer, Date> interval, Map<Date, JobLog> jls) {
 
         Date startInterval = interval.get(1);
         String fileName = DateUtil.getPeriodStringEng(startInterval) + ".pdf";

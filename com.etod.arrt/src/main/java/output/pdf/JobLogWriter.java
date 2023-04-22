@@ -46,19 +46,17 @@ public class JobLogWriter {
         String month = "Месяц";
         String dayOfWeek = "Д/н";
 
-        CellsProvider cellsProvider = new CellsProvider();
-        table.addCell(cellsProvider.getHeaderCell(month));
-        table.addCell(cellsProvider.getHeaderCell(dayOfWeek));
+        table.addCell(CellsProvider.getHeaderCell(month));
+        table.addCell(CellsProvider.getHeaderCell(dayOfWeek));
 
         for (String s : hours) {
-            table.addCell(cellsProvider.getMonthHeaderCell(s, hoursDividedOnColumns));
+            table.addCell(CellsProvider.getMonthHeaderCell(s, hoursDividedOnColumns));
         }
     }
 
     private static void addMonthJobLogs(PdfPTable table, Map<Date, JobLog> jls, Map<Integer, Date> interval) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
         SimpleDateFormat simpleFormat = new SimpleDateFormat(simpleTime);
-        CellsProvider cellsProvider = new CellsProvider();
 
         Set<Date> dates = jls.keySet();
         int month = interval.get(1).getMonth();
@@ -73,18 +71,18 @@ public class JobLogWriter {
             if (!dates.contains(d)) {
 
                 //write first 2 columns
-                table.addCell(cellsProvider.getRowCell(dateFormat.format(d)));
-                table.addCell(cellsProvider.getRowCell(DateUtil.getDayOfTheWeek(d)));
+                table.addCell(CellsProvider.getRowCell(dateFormat.format(d)));
+                table.addCell(CellsProvider.getRowCell(DateUtil.getDayOfTheWeek(d)));
 
                 for (int j = 2; j < numberOfColumns; j++) {
-                    table.addCell(cellsProvider.getRowCell(" "));
+                    table.addCell(CellsProvider.getRowCell(" "));
                 }
             } else {
                 JobLog jl = jls.get(d);
 
                 //write first 2 columns
-                table.addCell(cellsProvider.getRowCell(dateFormat.format(jl.getJobDate())));
-                table.addCell(cellsProvider.getRowCell(DateUtil.getDayOfTheWeek(jl.getJobDate())));
+                table.addCell(CellsProvider.getRowCell(dateFormat.format(jl.getJobDate())));
+                table.addCell(CellsProvider.getRowCell(DateUtil.getDayOfTheWeek(jl.getJobDate())));
 
                 int constantColumns = 2;
                 int hourStart = jl.getStartInterval().getHours();
@@ -99,15 +97,15 @@ public class JobLogWriter {
 
                 //inserting columns before starthour
                 for (int j = constantColumns; j < hoursAndMinutesColumnsToSkip; j++) {
-                    table.addCell(cellsProvider.getRowCell(" "));
+                    table.addCell(CellsProvider.getRowCell(" "));
                 }
                 //inserting interval column
-                table.addCell(cellsProvider.getRowIntervalCell(simpleFormat.format(jl.getStartInterval()) + " - " + simpleFormat.format(jl.getEndInterval()) + " = " + jl.getHours() + " ч.",
+                table.addCell(CellsProvider.getRowIntervalCell(simpleFormat.format(jl.getStartInterval()) + " - " + simpleFormat.format(jl.getEndInterval()) + " = " + jl.getHours() + " ч.",
                         intervalColumn));
 
                 //inserting rest of columns to complete the row
                 for (int k = endOfIntervalColumn; k < numberOfColumns; k++) {
-                    table.addCell(cellsProvider.getRowCell(" "));
+                    table.addCell(CellsProvider.getRowCell(" "));
                 }
             }
         }

@@ -8,9 +8,8 @@ import com.itextpdf.text.pdf.PdfPTable;
 
 public class CellsProvider {
 
-    public PdfPCell getHeaderCell(String content) {
-        PhraseProvider phraseProvider = new PhraseProvider();
-        PdfPCell cell = new PdfPCell(phraseProvider.getPhraseRowHeader(content));
+    public static PdfPCell getHeaderCell(String content) {
+        PdfPCell cell = new PdfPCell(PhraseProvider.getPhraseRowHeader(content));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         cell.setBorderWidth(1.1f);
@@ -18,21 +17,20 @@ public class CellsProvider {
         return cell;
     }
 
-    public PdfPCell getMonthHeaderCell(String content, int colSpan) {
+    public static PdfPCell getMonthHeaderCell(String content, int colSpan) {
         PdfPCell cell = getHeaderCell(content);
         cell.setColspan(colSpan);
         return cell;
     }
 
-    public PdfPCell getRowCell(String content) {
-        PhraseProvider phraseProvider = new PhraseProvider();
-        PdfPCell cell = new PdfPCell(phraseProvider.getPhraseRow(content));
+    public static PdfPCell getRowCell(String content) {
+        PdfPCell cell = new PdfPCell(PhraseProvider.getPhraseRow(content));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         return cell;
     }
 
-    public PdfPCell getRowIntervalCell(String content, int colSpan) {
+    public static PdfPCell getRowIntervalCell(String content, int colSpan) {
         PdfPCell cell = getRowCell(content);
         cell.setColspan(colSpan);
         cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -40,7 +38,7 @@ public class CellsProvider {
         return cell;
     }
 
-    public void addEmptyRow(PdfPTable table, int numberOfColumns) {
+    public static void addEmptyRow(PdfPTable table, int numberOfColumns) {
         if (numberOfColumns > 0) {
             PdfPCell cellBlankRow = new PdfPCell(new Phrase(" "));
             table.addCell(cellBlankRow);
@@ -48,7 +46,7 @@ public class CellsProvider {
         }
     }
 
-    public void addCells(PdfPTable table, int numberOfCells) {
+    public static void addCells(PdfPTable table, int numberOfCells) {
         if (numberOfCells > 0)
             for (int i = 0; i < numberOfCells; i++) {
                 table.addCell("");
