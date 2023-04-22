@@ -21,7 +21,7 @@ public class Keyboards {
         if (list != null) {
             if (!list.isEmpty()) {
                 int buttonsInLine = buttonsInLineDefault;
-                if (callbackType.equals(SysConstants.RESULTS_CALLBACK_TYPE))
+                if (callbackType.equals(SysConstants.RESULTS_CALLBACK_TYPE) || callbackType.equals(SysConstants.REPORT_CALLBACK_TYPE))
                     buttonsInLine = buttonsInLineMonthsNames;
 
                 List<List<String>> dividedList = ListUtils.partition(list, buttonsInLine);

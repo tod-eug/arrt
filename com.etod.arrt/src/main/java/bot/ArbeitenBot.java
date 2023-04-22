@@ -161,7 +161,7 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
 
         switch (parsedCallback[1]) {
             case SysConstants.RESULTS_CALLBACK_TYPE:
-                editMessage(chatId, messageId, MessageProvider.getMonthResultsMessage(jls), true, null);
+                editMessage(chatId, messageId, MessageProvider.getMonthResultsMessage(jls, map), true, null);
                 break;
             case SysConstants.REPORT_CALLBACK_TYPE:
                 File file = PdfsWriter.writePdfFile(map, jls);

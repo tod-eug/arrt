@@ -31,7 +31,7 @@ public class MessageProvider {
                 .append("У месяца ").append(jlr.getMonthOfDate()).append(" нет дня ").append(jlr.getDayOfDate()).toString();
     }
 
-    public static String getMonthResultsMessage(Map<Date, JobLog> jls) {
+    public static String getMonthResultsMessage(Map<Date, JobLog> jls, Map<Integer, Date> interval) {
         StringBuilder sb = new StringBuilder();
         SimpleDateFormat patternSimpleDate = new SimpleDateFormat(simpleDate);
         SimpleDateFormat patternSimpleTime = new SimpleDateFormat(simpleTime);
@@ -39,12 +39,21 @@ public class MessageProvider {
         double sum = 0;
         sb.append("Зафиксированы следующие часы работы: \n\n");
         Set<Date> set = jls.keySet();
+        int month = interval.get(1).getMonth();
 
-        for (Date d : set) {
-            JobLog jl = jls.get(d);
-            sb.append(patternSimpleDate.format(jl.getJobDate())).append("   ").append(patternSimpleTime.format(jl.getStartInterval())).append(" - ").append(patternSimpleTime.format(jl.getEndInterval())).append("    ")
-                    .append("<b>").append(jl.getHours()).append("</b> ч.\n");
-            sum = sum + jl.getHours();
+        //get month days
+        int monthStartDate = 1;
+        int monthEndDate = DateUtil.getLastDayOfMonth(month);
+
+        for (int i = monthStartDate; i <= monthEndDate; i++) {
+            Date d = DateUtil.getDate(i, month);
+
+            if (set.contains(d)) {
+                JobLog jl = jls.get(d);
+                sb.append(patternSimpleDate.format(jl.getJobDate())).append("   ").append(patternSimpleTime.format(jl.getStartInterval())).append(" - ").append(patternSimpleTime.format(jl.getEndInterval())).append("    ")
+                        .append("<b>").append(jl.getHours()).append("</b> ч.\n");
+                sum = sum + jl.getHours();
+            }
         }
 
         sb.append("\n").append("Общее количество часов: ").append(sum);
