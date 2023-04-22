@@ -13,7 +13,7 @@ import java.util.*;
 
 public class JobLogHelper {
 
-    public UUID saveJob(String userId, JobLogRaw jl) {
+    public static UUID saveJob(String userId, JobLogRaw jl) {
 
         SimpleDateFormat createDateDefaultPattern = new SimpleDateFormat(DatabaseHelper.createDateDefaultPattern);
         SimpleDateFormat jobDatePattern = new SimpleDateFormat(DatabaseHelper.jobDatePattern);
@@ -45,10 +45,9 @@ public class JobLogHelper {
         return id;
     }
 
-    public Map<Date, JobLog> getJobs(String userId, Date from, Date to) {
+    public static Map<Date, JobLog> getJobs(String userId, Date from, Date to) {
 
         Map<Date, JobLog> result = new HashMap<>();
-        JobLogMapper jlm = new JobLogMapper();
         SimpleDateFormat timeIntervalPattern = new SimpleDateFormat(DatabaseHelper.timeIntervalPattern);
 
         String startInterval = timeIntervalPattern.format(from);
@@ -60,7 +59,7 @@ public class JobLogHelper {
         try {
             ResultSet st = dbHelper.getPreparedStatement(selectQuery).executeQuery();
             while(st.next()) {
-                result.put(st.getDate("date"), jlm.mapJobLog(st.getString("date"), st.getString("start_time"), st.getString("end_time"), st.getString("hours")));
+                result.put(st.getDate("date"), JobLogMapper.mapJobLog(st.getString("date"), st.getString("start_time"), st.getString("end_time"), st.getString("hours")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,10 +69,9 @@ public class JobLogHelper {
         return result;
     }
 
-    public JobLog getJob(String jobItemId) {
+    public static JobLog getJob(String jobItemId) {
 
         JobLog result = null;
-        JobLogMapper jlm = new JobLogMapper();
 
         String selectQuery = String.format("select * from public.job_history where id = '%s';", jobItemId);
 
@@ -81,7 +79,7 @@ public class JobLogHelper {
         try {
             ResultSet st = dbHelper.getPreparedStatement(selectQuery).executeQuery();
             while(st.next()) {
-                result = jlm.mapJobLog(st.getString("date"), st.getString("start_time"), st.getString("end_time"), st.getString("hours"));
+                result = JobLogMapper.mapJobLog(st.getString("date"), st.getString("start_time"), st.getString("end_time"), st.getString("hours"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

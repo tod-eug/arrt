@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class JobLogMapper {
 
-    public JobLog mapJobLog(String jobDate, String startInterval, String endInterval, String hours) {
+    public static JobLog mapJobLog(String jobDate, String startInterval, String endInterval, String hours) {
 
         SimpleDateFormat jobDatePattern = new SimpleDateFormat(DatabaseHelper.jobDatePattern);
         SimpleDateFormat timeIntervalPattern = new SimpleDateFormat(DatabaseHelper.timeIntervalPattern);

@@ -138,13 +138,11 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
                 case SysConstants.END_MINUTES_CALLBACK_TYPE:
                     jlr.setEndIntervalMinutes(value);
                     jlr.setCompleted(true);
-                    JobLogHelper jlh = new JobLogHelper();
-                    UsersHelper uh = new UsersHelper();
-                    String userUuid = uh.findUserByTgId(userId.toString(), user, chatId.toString());
-                    UUID uuid = jlh.saveJob(userUuid, jlr);
+                    String userUuid = UsersHelper.findUserByTgId(userId.toString(), user, chatId.toString());
+                    UUID uuid = JobLogHelper.saveJob(userUuid, jlr);
                     JobLog finalJobLog;
                     if (uuid != null) {
-                        finalJobLog = jlh.getJob(uuid.toString());
+                        finalJobLog = JobLogHelper.getJob(uuid.toString());
                         editMessage(chatId, messageId, MessageProvider.getJobLoggedMessage(finalJobLog), true, null);
                     } else
                         deleteMessage(chatId, messageId);
@@ -157,11 +155,9 @@ public class ArbeitenBot extends TelegramLongPollingCommandBot {
     }
 
     private void processReportCallbackQuery(String[] parsedCallback, Long userId, Long chatId, int messageId, User user) {
-        JobLogHelper jlh = new JobLogHelper();
-        UsersHelper uh = new UsersHelper();
         Map<Integer, Date> map = DateUtil.getMonthIntervalString(parsedCallback[2]);
-        String userUuid = uh.findUserByTgId(userId.toString(), user, chatId.toString());
-        Map<Date, JobLog> jls = jlh.getJobs(userUuid, map.get(1), map.get(2));
+        String userUuid = UsersHelper.findUserByTgId(userId.toString(), user, chatId.toString());
+        Map<Date, JobLog> jls = JobLogHelper.getJobs(userUuid, map.get(1), map.get(2));
 
         switch (parsedCallback[1]) {
             case SysConstants.RESULTS_CALLBACK_TYPE:

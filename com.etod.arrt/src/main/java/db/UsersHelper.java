@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class UsersHelper {
 
-    public String createUser(User user, String chatId) {
+    public static String createUser(User user, String chatId) {
 
         String tgId = user.getId().toString();
         String userName = user.getUserName();
@@ -38,7 +38,7 @@ public class UsersHelper {
         return id.toString();
     }
 
-    public String findUserByTgId(String tgId, User user, String chatId) {
+    public static String findUserByTgId(String tgId, User user, String chatId) {
         String selectQuery = String.format("select id from public.users where tg_id = '%s';", tgId);
 
         DatabaseHelper dbHelper = new DatabaseHelper();
